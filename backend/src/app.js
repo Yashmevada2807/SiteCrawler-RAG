@@ -8,17 +8,12 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 
 // cors configurations
-// app.use(cors({
-//     origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
-//     credentials: true,
-//     methods: ["GET", "POST"],
-//     allowedHeaders: ["Authorization", "Content-Type"]
-// }))
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
     credentials: true,
-}));
-
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Authorization", "Content-Type"]
+}))
 
 import crawlingSiteRouter from "./routes/crawling.route.js"
 import chatRouter from "./routes/chat.route.js"
