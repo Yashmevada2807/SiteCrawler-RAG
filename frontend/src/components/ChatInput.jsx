@@ -16,7 +16,7 @@ const ChatInput = ({ loading, setLoading, userPrompt, setUserPrompt, setAiRespon
 
     try {
       setLoading(true)
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_SERVER_URL}/v1/api/chat`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/chat`, {
         userInput: userPrompt
       })
       console.log(response.data.data)
