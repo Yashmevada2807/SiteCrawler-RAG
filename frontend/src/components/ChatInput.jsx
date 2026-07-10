@@ -26,6 +26,7 @@ const ChatInput = ({
       const aiMessage = {
         role: "assistent",
         content: response.data.data.answer,
+        sources: response.data.data.sources
       };
 
       setMessages((prev) => [...prev, aiMessage]);
