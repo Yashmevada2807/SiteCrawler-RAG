@@ -1,60 +1,61 @@
 import axios from "axios";
-import { Globe, Search } from "lucide-react";
+import { Globe, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
-const UrlInput = ({setCrawledPagesStatus, setLoading, loading}) => {
+const UrlInput = ({ setCrawledPagesStatus, setLoading, loading }) => {
+  const [url, setUrl] = useState("");
 
-    const [url, setUrl] = useState("")
-    
-    
-
-    const crawlingSite = async () => {
-        if (!url.trim()) return
-        try {
-            setLoading(true)
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/crawl/crawlingSite`, {
-                url,
-            })
-            console.log(response.data.data)
-            setCrawledPagesStatus(response.data.data)
-            return response.data
-        } catch (error) {
-            console.error("Error", error)
-        } finally {
-            setLoading(false);
-        }
+  const crawlingSite = async () => {
+    if (!url.trim()) return;
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/crawl/crawlingSite`,
+        { url }
+      );
+      setCrawledPagesStatus(response.data.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error", error);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") crawlingSite();
+  };
 
-    return (
-        <div className="space-y-4">
-            <label className="text-sm font-medium text-slate-300">
-                Website URL
-            </label>
+  return (
+    <div className="space-y-3">
+      <label className="font-mono text-xs uppercase tracking-wider text-ink-3">
+        Source url
+      </label>
 
-            <div className="flex flex-col gap-4 md:flex-row">
-                <div className="relative flex-1">
-                    <Globe className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
-
-                    <input
-                        value={url}
-                        onChange={(e) => setUrl(e.target.value)}
-                        type="text"
-                        placeholder="https://example.com"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-12 pr-4 text-white outline-none transition focus:border-blue-500"
-                    />
-                </div>
-
-                <button
-                    onClick={crawlingSite}
-                    disabled={loading}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 font-semibold transition hover:bg-blue-700">
-                    <Search className="h-5 w-5" />
-                    {loading ? "Crawling..." : "Crawl Website"}
-                </button>
-            </div>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="relative flex-1">
+          <Globe className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-3" />
+          <input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            onKeyDown={handleKeyDown}
+            type="text"
+            placeholder="https://docs.example.com"
+            className="w-full rounded-lg border border-line bg-paper-3 py-2.5 pl-10 pr-4 font-mono text-sm text-ink outline-none placeholder:text-ink-3 focus:border-indigo"
+          />
         </div>
-    );
+
+        <button
+          onClick={crawlingSite}
+          disabled={loading}
+          className="flex items-center justify-center gap-2 rounded-lg bg-rust px-5 py-2.5 text-sm font-medium text-paper-2 hover:bg-rust-dark disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {loading ? "Crawling" : "Crawl site"}
+          {!loading && <ArrowRight className="h-4 w-4" />}
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default UrlInput;

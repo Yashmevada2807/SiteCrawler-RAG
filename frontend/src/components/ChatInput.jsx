@@ -1,57 +1,65 @@
 import axios from "axios";
-import { SendHorizontal } from "lucide-react";
-import { useState } from "react";
+import { ArrowUp } from "lucide-react";
 
-const ChatInput = ({ loading, setLoading, userPrompt, setUserPrompt, setAiResponse, setMessages }) => {
-
+const ChatInput = ({
+  loading,
+  setLoading,
+  userPrompt,
+  setUserPrompt,
+  setAiResponse,
+  setMessages,
+}) => {
   const sendUserPrompt = async () => {
-    if (!userPrompt.trim()) return
+    if (!userPrompt.trim()) return;
 
-    const userMessage = {
-      role: "user",
-      content: userPrompt
-    }
-
-    setMessages((prev) => [...prev, userMessage])
+    const userMessage = { role: "user", content: userPrompt };
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
-      setLoading(true)
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/chat`, {
-        userInput: userPrompt
-      })
-      console.log(response.data.data)
-      setAiResponse(response.data.data)
+      setLoading(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/chat`,
+        { userInput: userPrompt }
+      );
+      setAiResponse(response.data.data);
 
       const aiMessage = {
         role: "assistent",
-        content: response.data.data.answer
-      }
+        content: response.data.data.answer,
+      };
 
-      setMessages((prev) => [...prev, aiMessage])
-      setUserPrompt("")
-      return response.data
+      setMessages((prev) => [...prev, aiMessage]);
+      setUserPrompt("");
+      return response.data;
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Error:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") sendUserPrompt();
+  };
+
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3">
       <input
         value={userPrompt}
         onChange={(e) => setUserPrompt(e.target.value)}
+        onKeyDown={handleKeyDown}
         type="text"
-        placeholder="Ask anything about the crawled website..."
-        className="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-5 py-4 text-white outline-none transition-all focus:border-blue-500"
+        placeholder="Ask something about the crawled site"
+        className="flex-1 rounded-lg border border-line bg-paper-3 px-4 py-3 text-sm text-ink outline-none placeholder:text-ink-3 focus:border-indigo"
       />
 
       <button
         onClick={sendUserPrompt}
         disabled={loading}
-        className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-4 font-semibold transition-all hover:bg-blue-700">
-        <SendHorizontal size={18} />
-        {loading ? "Sending..." : "Send"}
+        aria-label="Send question"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-indigo text-paper-2 hover:bg-indigo-dark disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        <ArrowUp size={18} />
       </button>
     </div>
   );
