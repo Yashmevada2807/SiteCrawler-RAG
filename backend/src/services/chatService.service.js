@@ -1,18 +1,20 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { vectoreStore } from "../db/index.js";
+import { ChatGroq } from "@langchain/groq"
 import dotenv from "dotenv"
 
 
-const model = new ChatGoogleGenerativeAI({
-    apiKey: process.env.GEMINI_API_KEY,
-    model: process.env.GEMINI_MODEL,
-    maxOutputTokens: 1024,
-})
+const model = new ChatGroq({
+    apiKey: process.env.GROQ_API_KEY,
+    model: "llama-3.1-8b-instant",
+});
 
 
 export const processUserQuery = async (userPrompt) => {
 
+    console.time("Similarity Search");
     const relevantData = await vectoreStore.similaritySearch(userPrompt, 10)
+    console.timeEnd("Similarity Search");
 
     if (relevantData.length === 0) {
         return {
@@ -21,14 +23,16 @@ export const processUserQuery = async (userPrompt) => {
         };
     }
 
-    console.log("Retrieved Documents:");
-    relevantData.forEach((doc, index) => {
-        console.log(`\nDocument ${index + 1}`);
-        console.log("Source:", doc.metadata.sourceUrl);
-        console.log("Content:", doc.pageContent.slice(0, 500));
-    });
+    // console.log("Retrieved Documents:");
+    // relevantData.forEach((doc, index) => {
+    //     console.log(`\nDocument ${index + 1}`);
+    //     console.log("Source:", doc.metadata.sourceUrl);
+    //     console.log("Content:", doc.pageContent.slice(0, 500));
+    // });
 
+    console.time("Context Building");
     const contextText = relevantData.map((docs) => docs.pageContent).join("\n\n")
+    console.timeEnd("Context Building");
 
     const uniqueSources = [...new Set(relevantData.map((docs) => docs.metadata.sourceUrl))]
 
@@ -49,7 +53,13 @@ export const processUserQuery = async (userPrompt) => {
     ${userPrompt}`
 
     try {
+
+        console.time("Embedding Query");
+        const queryEmbedding = await vectoreStore.embeddings.embedQuery(userPrompt);
+        console.timeEnd("Embedding Query");
+        console.time("Gemini")
         const response = await model.invoke(systemPrompt)
+        console.timeEnd("Gemini");
 
         return {
             answer: response.content,
