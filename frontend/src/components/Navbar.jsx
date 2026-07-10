@@ -13,15 +13,11 @@ const Navbar = () => {
               SiteCrawler
             </h1>
             <p className="font-mono text-[11px] uppercase tracking-wider text-ink-3">
-              RAG index
+              RAG 
             </p>
           </div>
         </div>
 
-        <div className="hidden items-center gap-2 text-xs text-ink-2 md:flex">
-          <span className="h-1.5 w-1.5 rounded-full bg-sage" />
-          Index engine online
-        </div>
       </div>
     </header>
   );
