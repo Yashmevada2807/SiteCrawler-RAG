@@ -11,8 +11,6 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cors({
     origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
     credentials: true,
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Authorization", "Content-Type"]
 }))
 
 import crawlingSiteRouter from "./routes/crawling.route.js"
