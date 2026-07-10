@@ -10,7 +10,7 @@ const UrlInput = ({ setCrawledPagesStatus, setLoading, loading }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/crawl/crawlingSite`,
+        ` ${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/crawl/crawlingSite`,
         { url }
       );
       setCrawledPagesStatus(response.data.data);

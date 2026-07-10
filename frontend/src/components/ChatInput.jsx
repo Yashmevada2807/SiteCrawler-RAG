@@ -14,7 +14,7 @@ const ChatInput = ({
 
     const userMessage = { role: "user", content: userPrompt };
     setMessages((prev) => [...prev, userMessage]);
-
+    // 
     try {
       setLoading(true);
       const response = await axios.post(
@@ -22,11 +22,10 @@ const ChatInput = ({
         { userInput: userPrompt }
       );
       setAiResponse(response.data.data);
-
       const aiMessage = {
         role: "assistent",
         content: response.data.data.answer,
-        sources: response.data.data.sources
+        sources: response.data.data.source
       };
 
       setMessages((prev) => [...prev, aiMessage]);
