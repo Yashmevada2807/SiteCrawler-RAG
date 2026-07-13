@@ -6,7 +6,7 @@ const ChatBubble = ({ message }) => {
   return (
     <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`flex max-w-[80%] gap-3 ${
+        className={`flex max-w-[70%] gap-3 ${
           isUser ? "flex-row-reverse" : ""
         }`}
       >
