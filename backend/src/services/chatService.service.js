@@ -10,10 +10,18 @@ const model = new ChatGroq({
 });
 
 
-export const processUserQuery = async (userPrompt) => {
+export const processUserQuery = async (userPrompt, userId) => {
 
     console.time("Similarity Search");
-    const relevantData = await vectoreStore.similaritySearch(userPrompt, 10)
+    const relevantData = await vectoreStore.similaritySearch(
+        userPrompt,
+        10,
+        {
+            user_id: userId
+        }
+    )
+    console.log("userId: ",userId)
+    console.log("relevant data: ",relevantData)
     console.timeEnd("Similarity Search");
 
     if (relevantData.length === 0) {
