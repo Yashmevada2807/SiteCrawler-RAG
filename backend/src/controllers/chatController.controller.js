@@ -5,11 +5,11 @@ import { processUserQuery } from "../services/chatService.service.js";
 
 
 const handleChatRequest = asyncHandler(async (req, res) => {
-    const { userInput } = req.body
+    const { userInput, userId } = req.body
 
     if (!userInput || userInput.trim() === "") throw new ApiError(400, "Please enter a valid question or message.")
     
-    const result = await processUserQuery(userInput)
+    const result = await processUserQuery(userInput, userId)
 
     return res.json(
         new ApiRespose(
