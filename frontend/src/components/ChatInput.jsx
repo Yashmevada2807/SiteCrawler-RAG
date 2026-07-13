@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ArrowUp } from "lucide-react";
+import { getUserId } from "../random/GenerateUserId";
 
 const ChatInput = ({
   loading,
@@ -19,7 +20,11 @@ const ChatInput = ({
       setLoading(true);
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/chat`,
-        { userInput: userPrompt }
+        { 
+          userInput: userPrompt,
+          userId: getUserId()
+
+         }
       );
       setAiResponse(response.data.data);
       const aiMessage = {
