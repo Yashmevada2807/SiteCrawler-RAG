@@ -23,7 +23,7 @@ const chunkText = (text, chunkSize = 600, overlap = 100) => {
     return chunks
 }
 
-export const crawlingSite = async (incomingUrl, pageLimit = 22) => {
+export const crawlingSite = async (incomingUrl,userId, crawlId, pageLimit = 22) => {
     const targetHostname = new URL(incomingUrl).hostname
     const visited = new Set()
     const queue = [incomingUrl]
@@ -33,7 +33,7 @@ export const crawlingSite = async (incomingUrl, pageLimit = 22) => {
 
         if (visited.has(currentUrl)) continue
         visited.add(currentUrl)
-        console.log(`[CRAWLER] Politely visiting: ${currentUrl}`);
+        console.log(`visiting: ${currentUrl}`);
         try {
 
             await delay(2000)
@@ -74,7 +74,9 @@ export const crawlingSite = async (incomingUrl, pageLimit = 22) => {
                 return new Document({
                     pageContent: chunkStr,
                     metadata: {
-                        sourceUrl: currentUrl
+                        user_id: userId,
+                        crawl_id: crawlId,
+                        sourceUrl: currentUrl,
                     }
                 })
             })
