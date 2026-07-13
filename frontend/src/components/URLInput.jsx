@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Globe, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { getUserId } from "../random/GenerateUserId";
 
 const UrlInput = ({ setCrawledPagesStatus, setLoading, loading }) => {
   const [url, setUrl] = useState("");
@@ -11,7 +12,10 @@ const UrlInput = ({ setCrawledPagesStatus, setLoading, loading }) => {
       setLoading(true);
       const response = await axios.post(
         ` ${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/crawl/crawlingSite`,
-        { url }
+        {
+          url,
+          userId: getUserId()
+        }
       );
       setCrawledPagesStatus(response.data.data);
       return response.data;
