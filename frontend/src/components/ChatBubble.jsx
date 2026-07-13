@@ -6,37 +6,34 @@ const ChatBubble = ({ message }) => {
   return (
     <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`flex max-w-[70%] gap-3 ${
-          isUser ? "flex-row-reverse" : ""
-        }`}
+        className={`flex w-[70%] gap-3 ${isUser ? "flex-row-reverse" : ""
+          }`}
       >
         <div
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-            isUser
-              ? "bg-ink text-paper-2"
-              : "border border-line bg-paper-3 text-indigo"
-          }`}
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${isUser
+            ? "bg-ink text-paper-2"
+            : "border border-line bg-paper-3 text-indigo"
+            }`}
         >
           {isUser ? <User size={15} /> : <Bot size={15} />}
         </div>
 
         <div
-          className={`rounded-xl px-4 py-3 text-[15px] leading-7 ${
-            isUser
-              ? "bg-ink text-paper-2"
-              : "border border-line bg-paper-3 text-ink"
-          }`}
+          className={`rounded-xl px-4 py-3 max-w-[115%] text-[15px] leading-7 ${isUser
+            ? "bg-ink text-paper-2"
+            : "border border-line bg-paper-3 text-ink"
+            }`}
         >
           <p className="whitespace-pre-wrap">{message.content}</p>
 
           {!isUser &&
             message.sources &&
-            message.sources.length > 0 && (
-              <div className="mt-4 border-t border-line pt-3">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-3">
-                  Sources
-                </p>
-
+            message.sources.length > 0 &&
+            message.content !== "I cannot find the answer in the provided context." ? (
+            <div className="mt-4 border-t border-line pt-3">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-3">
+                Sources
+              </p>
                 <div className="space-y-2">
                   {message.sources.map((source, index) => (
                     <a
@@ -50,9 +47,11 @@ const ChatBubble = ({ message }) => {
                       <span className="truncate">{source}</span>
                     </a>
                   ))}
-                </div>
-              </div>
-            )}
+                </div> 
+            </div>
+          ) :
+            null
+          }
         </div>
       </div>
     </div>
