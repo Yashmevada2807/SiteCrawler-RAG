@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ArrowUp } from "lucide-react";
 import { getUserId } from "../random/GenerateUserId";
+import { toast } from "react-toastify";
 
 const ChatInput = ({
   loading,
@@ -11,7 +12,10 @@ const ChatInput = ({
   setMessages,
 }) => {
   const sendUserPrompt = async () => {
-    if (!userPrompt.trim()) return;
+    if (!userPrompt.trim()) {
+      toast.warning("Please enter some prompt for reply")
+      return
+    };
 
     const userMessage = { role: "user", content: userPrompt };
     setMessages((prev) => [...prev, userMessage]);
@@ -20,11 +24,11 @@ const ChatInput = ({
       setLoading(true);
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_SERVER_URL}v1/api/chat`,
-        { 
+        {
           userInput: userPrompt,
           userId: getUserId()
 
-         }
+        }
       );
       setAiResponse(response.data.data);
       const aiMessage = {
@@ -62,7 +66,7 @@ const ChatInput = ({
         onClick={sendUserPrompt}
         disabled={loading}
         aria-label="Send question"
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-indigo text-paper-2 hover:bg-indigo-dark disabled:cursor-not-allowed disabled:opacity-60"
+        className={`flex ${loading ? "disabled:opacity-60 disabled:cursor-not-allowed " : ""} h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-indigo text-paper-2 hover:bg-indigo-dark cursor-pointer  `}
       >
         <ArrowUp size={18} />
       </button>
