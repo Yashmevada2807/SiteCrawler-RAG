@@ -25,29 +25,30 @@ const ChatBubble = ({ message }) => {
             }`}
         >
           <p className="whitespace-pre-wrap">{message.content}</p>
-
           {!isUser &&
             message.sources &&
-            message.sources.length > 0 &&
-            message.content !== "I cannot find the answer in the provided context." ? (
+            message.sources.length > 0 && (
+              message.content !== "I cannot find the answer in the provided context." &&
+              message.content !== "I cannot find the answer in the provided text." &&
+              message.content !== "I cannot find the answer in the provided information.") ? (
             <div className="mt-4 border-t border-line pt-3">
               <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-3">
                 Sources
               </p>
-                <div className="space-y-2">
-                  {message.sources.map((source, index) => (
-                    <a
-                      key={index}
-                      href={source}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 rounded-md bg-paper-2 px-3 py-2 text-sm text-indigo transition hover:bg-paper-1 hover:underline"
-                    >
-                      <ExternalLink size={14} />
-                      <span className="truncate">{source}</span>
-                    </a>
-                  ))}
-                </div> 
+              <div className="space-y-2">
+                {message.sources.map((source, index) => (
+                  <a
+                    key={index}
+                    href={source}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-md bg-paper-2 px-3 py-2 text-sm text-indigo transition hover:bg-paper-1 hover:underline"
+                  >
+                    <ExternalLink size={14} />
+                    <span className="truncate">{source}</span>
+                  </a>
+                ))}
+              </div>
             </div>
           ) :
             null
