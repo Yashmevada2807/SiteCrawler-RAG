@@ -23,6 +23,7 @@ const UrlInput = ({ setCrawledPagesStatus, setLoading, loading }) => {
         }
       );
       setCrawledPagesStatus(response.data.data);
+      setUrl("")
       return response.data;
     } catch (error) {
       console.error("Error", error);
